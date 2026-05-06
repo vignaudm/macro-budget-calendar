@@ -1,7 +1,7 @@
 name: Update Macro-Budget Calendar
 on:
 schedule:
-- cron: "0 */3 * * 1-5"
+cron: "0 */3 * * 1-5"
 workflow_dispatch:
 push:
 branches: ["main"]
@@ -9,22 +9,18 @@ jobs:
 run:
 runs-on: ubuntu-latest
 steps:
-- uses: actions/checkout@v4
-- uses: actions/setup-python@v5
+uses: actions/checkout@v4
+uses: actions/setup-python@v5
 with:
 python-version: "3.11"
-- run: pip install -r requirements.txt
-- name: Write service account key
+run: pip install -r requirements.txt
+name: Write service account key
 env:
-GCP_SA_JSON: secrets.GCP 
-S
-​
- A 
-J
-​
- SONrun:∣printf"−name:Runupdaterenv:CALENDAR 
-I
-​
- D:{{ secrets.CALENDAR_ID }}
+GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+run: |
+printf "%s" "$GCP_SA_JSON" > sa.json
+name: Run updater
+env:
+CALENDAR_ID: ${{ secrets.CALENDAR_ID }}
 GOOGLE_APPLICATION_CREDENTIALS: sa.json
 run: python updater.py
